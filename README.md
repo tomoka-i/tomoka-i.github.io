@@ -1,1 +1,0 @@
-# tomoka-i.github.io
