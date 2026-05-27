@@ -1,13 +1,508 @@
-<!DOCTIPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Tomoka Iwase</title>
-  </head>
-  <body>
-    <h1>Tomoka Iwase</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoka Iwase - Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #030712;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.3);
+      --card-bg: rgba(17, 24, 39, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+    }
 
-    <p>1123565</p>
-  </body>
-  
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      margin-top: 0;
+    }
+
+    #canvas-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: auto;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .container > * {
+      pointer-events: auto;
+    }
+
+    .hero {
+      margin-bottom: 5rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero .location {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .links a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    section:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    section h2 {
+      font-size: 1.75rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    section h2::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .item {
+      margin-bottom: 2.5rem;
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.25rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .item-header h3 {
+      font-size: 1.25rem;
+      margin: 0;
+      color: #fff;
+    }
+
+    .item-date {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .item-subtitle {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .item ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: #cbd5e1;
+    }
+
+    .item li {
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-stack {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .tech-stack span {
+      color: var(--accent);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-group h3 {
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .skill-group p {
+      color: #cbd5e1;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.5rem; }
+      section { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="canvas-container"></div>
+
+  <div class="container">
+    <header class="hero">
+      <h1>Tomoka Iwase</h1>
+      <div class="location">Taoyuan, Taiwan</div>
+      <div class="links">
+        <a href="mailto:tomoka12turquoise@gmail.com">Email</a>
+        <a href="https://linkedin.com/in/tomoka-iwase-b2b4a0354" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/tomoka-i" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>A trilingual Informatics student in Taiwan (Japanese, English, Chinese) focused on mastering CS concepts through technical discussions in a global environment. Through Build@Mercari, I gained hands-on experience in Go and professional workflows, fostering a commitment to writing maintainable code. I aim to leverage my adaptability and technical foundation to contribute to diverse engineering teams.</p>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="item">
+        <div class="item-header">
+          <h3>Yuan Ze University</h3>
+          <span class="item-date">September 2023 – Present</span>
+        </div>
+        <div class="item-subtitle">
+          <span>International Bachelor Program in Informatics</span>
+          <span>Expected Graduation: June 2027</span>
+        </div>
+        <ul>
+          <li>Recipient of the Taiwan Ministry of Education (MOE) Scholarship: Awarded a full 4-year scholarship for academic excellence</li>
+          <li>Relevant Coursework: Data Structures, Algorithms, Programming (C++/Python)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Academic Projects</h2>
+      <div class="item">
+        <div class="item-header">
+          <h3>Reversible Data Hiding in Encrypted Images (RDHEI)</h3>
+          <span class="item-date">September 2025 – Present</span>
+        </div>
+        <div class="item-subtitle">
+          <span>Yuan Ze University — Advisor: Cheng-Ta Huang</span>
+        </div>
+        <ul>
+          <li>Identified inefficiencies in existing RDHEI literature and developed a CNN-based prediction model using PyTorch to enhance feature extraction.</li>
+          <li>Aiming to optimize the trade-off between higher embedding capacity and image restoration quality.</li>
+          <li>Performance is evaluated using PSNR and SSIM; currently conducting comparative analysis against baseline methods with a developed prototype.</li>
+          <li>Collaborating with a senior student to co-author a research paper and deliver a final presentation on the findings.</li>
+        </ul>
+        <div class="tech-stack"><span>Used Technologies:</span> Python, PyTorch, CNN</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Activities</h2>
+      
+      <div class="item">
+        <div class="item-header">
+          <h3>Build@Mercari 2025</h3>
+          <span class="item-date">March 2025</span>
+        </div>
+        <div class="item-subtitle">
+          <span>Mercari, Inc.</span>
+        </div>
+        <ul>
+          <li>Participated in a specialized training program for software engineering, gaining hands-on experience with Go and backend development principles</li>
+          <li>Engaged in technical discussions and peer code reviews within a team to solve complex programming assignments, ensuring code quality and efficient problem-solving</li>
+          <li>Practiced modern development workflows, including Git/GitHub for version control and collaborating in a simulated professional engineering environment</li>
+        </ul>
+        <div class="tech-stack"><span>Used Technologies:</span> Go, Git, GitHub, Backend Development Basics</div>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <h3>Design Officer, Student Association</h3>
+          <span class="item-date">June 2024 – June 2025</span>
+        </div>
+        <div class="item-subtitle">
+          <span>Yuan Ze University</span>
+        </div>
+        <ul>
+          <li>Coordinated orientation events and cultural festivals within a diverse team of 10+ members, conducting all operations in English and Chinese</li>
+          <li>Designed promotional materials and managed venue logistics, ensuring seamless event execution and deadline compliance</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>Programming</h3>
+          <p>C++ (2+ years), Python, Go, HTML/CSS</p>
+        </div>
+        <div class="skill-group">
+          <h3>Tools</h3>
+          <p>Git/GitHub, Linux (CLI), Docker, VS Code</p>
+        </div>
+        <div class="skill-group">
+          <h3>Languages</h3>
+          <p>Japanese (Native), English (TOEIC 810), Chinese (TOCFL B1)</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
+  <script>
+    // --- THREE.JS ADVANCED BACKGROUND SCENE ---
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030712, 0.03);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 15);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // 1. Interactive Particle System
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 2000;
+    const posArray = new Float32Array(particlesCount * 3);
+    const colorsArray = new Float32Array(particlesCount * 3);
+    
+    const colorPrimary = new THREE.Color(0x38bdf8); 
+    const colorSecondary = new THREE.Color(0x818cf8); 
+    const colorAccent = new THREE.Color(0xf43f5e); 
+
+    for(let i = 0; i < particlesCount; i++) {
+        posArray[i * 3] = (Math.random() - 0.5) * 40;     
+        posArray[i * 3 + 1] = (Math.random() - 0.5) * 40; 
+        posArray[i * 3 + 2] = (Math.random() - 0.5) * 40; 
+
+        const rand = Math.random();
+        let mixedColor;
+        if (rand < 0.45) mixedColor = colorPrimary.clone().lerp(colorSecondary, Math.random());
+        else if (rand < 0.9) mixedColor = colorSecondary;
+        else mixedColor = colorAccent;
+
+        colorsArray[i * 3] = mixedColor.r;
+        colorsArray[i * 3 + 1] = mixedColor.g;
+        colorsArray[i * 3 + 2] = mixedColor.b;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.08,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // 2. Abstract Geometric Cat (Homage to original)
+    const catGroup = new THREE.Group();
+    
+    const wireMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x38bdf8, 
+      wireframe: true, 
+      transparent: true, 
+      opacity: 0.15 
+    });
+    const solidMaterial = new THREE.MeshPhongMaterial({
+      color: 0x0f172a,
+      transparent: true,
+      opacity: 0.9,
+      shininess: 100,
+      flatShading: true
+    });
+
+    function createCatPart(geometry, yPos, zPos) {
+      const mesh = new THREE.Mesh(geometry, solidMaterial);
+      const wire = new THREE.Mesh(geometry, wireMaterial);
+      mesh.add(wire);
+      mesh.position.set(0, yPos, zPos);
+      return mesh;
+    }
+
+    const body = createCatPart(new THREE.IcosahedronGeometry(1.2, 1), 0, 0);
+    body.scale.set(1, 0.8, 1.2);
+    catGroup.add(body);
+
+    const head = createCatPart(new THREE.IcosahedronGeometry(0.7, 1), 1.2, 0.8);
+    catGroup.add(head);
+
+    const earGeo = new THREE.ConeGeometry(0.3, 0.6, 4);
+    const earL = createCatPart(earGeo, 1.7, 0.8);
+    earL.position.x = -0.4;
+    earL.rotation.z = 0.2;
+    catGroup.add(earL);
+
+    const earR = createCatPart(earGeo, 1.7, 0.8);
+    earR.position.x = 0.4;
+    earR.rotation.z = -0.2;
+    catGroup.add(earR);
+
+    // Position it slightly dynamically in the background
+    catGroup.position.set(6, 0, -8);
+    scene.add(catGroup);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+    const dirLight2 = new THREE.DirectionalLight(0x818cf8, 1);
+    dirLight2.position.set(-5, -5, 5);
+    scene.add(dirLight2);
+
+    // Interaction
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX) * 0.001;
+        mouseY = (event.clientY - windowHalfY) * 0.001;
+    });
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animation Loop
+    const clock = new THREE.Clock();
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+
+        targetX = mouseX * 2;
+        targetY = mouseY * 2;
+        
+        particlesMesh.rotation.y += 0.0008;
+        particlesMesh.rotation.x += 0.0004;
+
+        // Smooth camera follow
+        camera.position.x += (targetX - camera.position.x) * 0.02;
+        camera.position.y += (-targetY - camera.position.y) * 0.02;
+        camera.lookAt(scene.position);
+
+        // Cat subtle float animation
+        catGroup.rotation.y = Math.sin(elapsedTime * 0.3) * 0.1 - 0.3;
+        catGroup.rotation.z = Math.sin(elapsedTime * 0.2) * 0.05;
+        catGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.3;
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
 </html>
